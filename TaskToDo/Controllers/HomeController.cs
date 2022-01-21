@@ -27,9 +27,7 @@ namespace TaskToDo.Controllers
        
         public IActionResult Index()
         {
-            //TODO mio
-            return Redirect(this._signInManager.IsSignedIn(User) ? "~/ToDo" : "~/Identity/Account/Login");
-            
+            return Redirect(this._signInManager.IsSignedIn(User) ? "~/ToDo" : "~/Identity/Account/Login");            
         }
 
         public IActionResult Privacy()

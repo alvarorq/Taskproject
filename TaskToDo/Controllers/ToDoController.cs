@@ -26,10 +26,13 @@ namespace TaskToDo.Controllers
             this._signInManager = signInManager;
             this.context = context;
         }
-         
+
+        /** Get list of task by Id user logged if it exist.
+        * 
+        *          
+        */
         public async Task<IActionResult> Index()
-        {
-            //TODO Linq
+        {            
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if(string.IsNullOrEmpty(userId)) return Redirect("~/Identity/Account/Login");
             IQueryable<TodoList> items = context.ToDoList
@@ -38,10 +41,18 @@ namespace TaskToDo.Controllers
             List<TodoList> todolist = await items.ToListAsync();
             return View(todolist);            
         }
-        
+
+        /** Go to Create View
+         * 
+         */
         [ValidateAntiForgeryToken]
         public IActionResult Create() => View();
-        
+
+
+        /** Set Task.
+         * 
+         * @item TodoList item that is going to be inserted.         
+         */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(TodoList item)
@@ -51,7 +62,6 @@ namespace TaskToDo.Controllers
             item.CREATED =  DateTime.Now;
             item.LAST_UPD =  DateTime.Now;
             
-
             if (item.ID_USUARIO != null )
             {
                 context.Add(item);
@@ -62,6 +72,10 @@ namespace TaskToDo.Controllers
             return View(item);
         }
 
+        /** Go to Edit View
+         * 
+         * @id Int, Id of the task which is going to be show on the edit View        
+         */
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id)
         {
@@ -74,7 +88,11 @@ namespace TaskToDo.Controllers
 
             return View(item);
         }
-
+       
+        /** Put Task.
+         * 
+         * @item TodoList item that is going to be updated.         
+         */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(TodoList item)
@@ -89,6 +107,11 @@ namespace TaskToDo.Controllers
             }
             return View(item);
         }
+
+        /** Delete task.
+         * 
+         * @id Int, Id of the task that is going to be deleated.         
+         */
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
